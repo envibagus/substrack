@@ -30,7 +30,7 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-surface-50 dark:bg-slate-950 transition-colors duration-300">
       {/* Main Content Area */}
-      <main className="max-w-lg mx-auto">
+      <main className="max-w-lg mx-auto pt-[env(safe-area-inset-top)]">
         {activeView === 'home' && <Dashboard onOpenSettings={() => setActiveView('settings')} onModalOpenChange={setIsAnyModalOpen} />}
         {activeView === 'calendar' && <CalendarView />}
         {activeView === 'settings' && <SettingsPage onBack={() => setActiveView('home')} />}

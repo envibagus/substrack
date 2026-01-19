@@ -51,7 +51,8 @@ export function BottomNav({ activeTab = 'home', onTabChange }: BottomNavProps) {
           "border border-white/40 dark:border-white/10",
           "shadow-[0_4px_20px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.3)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.08)]",
           "rounded-2xl",
-          "safe-container transition-colors duration-300"
+          "transition-colors duration-300",
+          "pb-[calc(0.5rem+env(safe-area-inset-bottom))]"
         )}
       >
         <div className="flex items-center justify-around gap-2 px-3 py-3">
@@ -108,9 +109,6 @@ export function BottomNav({ activeTab = 'home', onTabChange }: BottomNavProps) {
             );
           })}
         </div>
-
-        {/* Safe area spacer */}
-        <div className="h-safe-bottom" />
       </div>
     </motion.nav>
   );

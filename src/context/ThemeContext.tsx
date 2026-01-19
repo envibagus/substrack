@@ -29,6 +29,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const root = document.documentElement;
     root.classList.remove('light', 'dark');
     root.classList.add(resolvedTheme);
+
+    // Update iOS status bar color
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    if (themeColorMeta) {
+      themeColorMeta.setAttribute('content', resolvedTheme === 'dark' ? '#020617' : '#f0f9ff');
+    }
   }, [resolvedTheme]);
 
   useEffect(() => {
