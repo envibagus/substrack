@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect, useRef } from 'react';
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import type { AppContextType, AppState, AppAction, Subscription, Profile } from '../types';
 import { STORAGE_KEY } from '../constants/categories';
 import { getMonthlyCost } from '../utils/helpers';

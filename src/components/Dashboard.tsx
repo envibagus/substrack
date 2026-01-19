@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { motion, type Variants, AnimatePresence } from 'framer-motion';
-import { TrendingUp, TrendingDown, ChevronRight, Calendar, CreditCard, BarChart3, Clock, AlertCircle, User, X, ChevronLeft, ChevronRight as ChevronRightIcon } from 'lucide-react';
+import { TrendingUp, TrendingDown, ChevronRight, Calendar, CreditCard, BarChart3, Clock, AlertCircle, X, ChevronLeft, ChevronRight as ChevronRightIcon } from 'lucide-react';
 import { XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Area } from 'recharts';
 import confetti from 'canvas-confetti';
 import { useApp } from '../context/AppContext';
