@@ -55,7 +55,7 @@ export function Dashboard({ onOpenSettings, onModalOpenChange }: DashboardProps)
     onModalOpenChange?.(hasOpenModal);
   }, [showHistoryModal, selectedSubscription, onModalOpenChange]);
 
-  const { subscriptions, isLoading, currency } = state;
+  const { subscriptions, isLoading, currency, profile } = state;
 
   const activeSubscriptions = subscriptions.filter((s) => s.isActive);
 
@@ -289,12 +289,18 @@ export function Dashboard({ onOpenSettings, onModalOpenChange }: DashboardProps)
                       <Clock size={18} className="text-surface-600 dark:text-slate-400" />
                     </motion.button>
                     <motion.button
-                      className="w-9 h-9 rounded-full bg-white dark:bg-slate-800 shadow-soft-sm dark:shadow-lg flex items-center justify-center border border-surface-100 dark:border-white/10"
+                      className="w-9 h-9 rounded-full bg-gradient-to-br from-primary-400 to-accent-500 shadow-soft-sm dark:shadow-lg flex items-center justify-center border-2 border-white dark:border-white/10 overflow-hidden"
                       onClick={() => onOpenSettings?.()}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
-                      <User size={18} className="text-surface-600 dark:text-slate-400" />
+                      {profile.picture ? (
+                        <img src={profile.picture} alt="Profile" className="w-full h-full rounded-full object-cover" />
+                      ) : (
+                        <span className="text-white text-sm font-bold">
+                          {profile.username.charAt(0).toUpperCase()}
+                        </span>
+                      )}
                     </motion.button>
                   </div>
                 </div>

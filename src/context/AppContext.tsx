@@ -1,7 +1,9 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import type { AppContextType, AppState, AppAction, Subscription } from '../types';
+import React, { createContext, useContext, useReducer, useEffect, useRef } from 'react';
+import type { AppContextType, AppState, AppAction, Subscription, Profile } from '../types';
 import { STORAGE_KEY } from '../constants/categories';
 import { getMonthlyCost } from '../utils/helpers';
+
+const PROFILE_STORAGE_KEY = 'subtrack-profile';
 
 /**
  * App Context for managing subscription state
@@ -14,6 +16,7 @@ const initialState: AppState = {
   currency: 'IDR',
   isLoading: true,
   error: null,
+  profile: { username: 'User', picture: null },
 };
 
 // Reducer
@@ -59,6 +62,11 @@ function appReducer(state: AppState, action: AppAction): AppState {
       return {
         ...state,
         currency: action.payload,
+      };
+    case 'SET_PROFILE':
+      return {
+        ...state,
+        profile: action.payload,
       };
     default:
       return state;
@@ -109,6 +117,23 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     loadCurrency();
   }, []);
 
+  // Load profile from local storage on mount
+  useEffect(() => {
+    const loadProfile = () => {
+      try {
+        const storedProfile = localStorage.getItem(PROFILE_STORAGE_KEY);
+        if (storedProfile) {
+          const parsed = JSON.parse(storedProfile);
+          dispatch({ type: 'SET_PROFILE', payload: parsed });
+        }
+      } catch (error) {
+        console.error('Failed to load profile:', error);
+      }
+    };
+
+    loadProfile();
+  }, []);
+
   // Save to local storage whenever subscriptions change
   useEffect(() => {
     if (state.subscriptions.length > 0) {
@@ -124,6 +149,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       console.error('Failed to save currency:', error);
     }
   }, [state.currency]);
+
+  // Save profile to local storage whenever it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(state.profile));
+    } catch (error) {
+      console.error('Failed to save profile:', error);
+    }
+  }, [state.profile]);
 
   // Helper to save to local storage
   const saveToLocalStorage = (subscriptions: Subscription[]) => {
@@ -156,6 +190,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
     setCurrency: (currency: string) => {
       dispatch({ type: 'SET_CURRENCY', payload: currency });
+    },
+
+    setProfile: (profile: Profile) => {
+      dispatch({ type: 'SET_PROFILE', payload: profile });
     },
 
     getUpcomingSubscriptions: (days: number = 7) => {

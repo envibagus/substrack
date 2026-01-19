@@ -66,6 +66,14 @@ export interface SpendingData {
 }
 
 /**
+ * User profile data
+ */
+export interface Profile {
+  username: string;
+  picture: string | null;
+}
+
+/**
  * App state structure
  */
 export interface AppState {
@@ -73,6 +81,7 @@ export interface AppState {
   currency: string;
   isLoading: boolean;
   error?: string | null;
+  profile: Profile;
 }
 
 /**
@@ -85,7 +94,8 @@ export type AppAction =
   | { type: 'DELETE_SUBSCRIPTION'; payload: string }
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string | null }
-  | { type: 'SET_CURRENCY'; payload: string };
+  | { type: 'SET_CURRENCY'; payload: string }
+  | { type: 'SET_PROFILE'; payload: Profile };
 
 /**
  * Context type
@@ -98,6 +108,7 @@ export interface AppContextType {
     updateSubscription: (id: string, updates: Partial<Subscription>) => void;
     deleteSubscription: (id: string) => void;
     setCurrency: (currency: string) => void;
+    setProfile: (profile: Profile) => void;
     getUpcomingSubscriptions: (days?: number) => Subscription[];
     getTotalMonthlySpend: () => number;
   };

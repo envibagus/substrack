@@ -72,12 +72,6 @@ interface CategoryInfoExtended {
   gradient: string;
 }
 
-interface ProfileData {
-  username: string;
-  picture: string | null;
-}
-
-const PROFILE_STORAGE_KEY = 'subtrack-profile';
 const CATEGORIES_STORAGE_KEY = 'subtrack-custom-categories';
 const PAYMENT_METHODS_STORAGE_KEY = 'subtrack-payment-methods';
 const LISTS_STORAGE_KEY = 'subtrack-lists';
@@ -102,8 +96,8 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [openModal, setOpenModal] = useState<string | null>(null);
 
-  // Profile state with localStorage persistence
-  const [profile, setProfile] = useState<ProfileData>({ username: 'User', picture: null });
+  // Profile from AppContext
+  const profile = state.profile;
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [editUsername, setEditUsername] = useState('');
 
@@ -117,18 +111,8 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
     { id: '2', name: 'Mastercard •••• 8888', type: 'card', last4: '8888' },
   ]);
 
-  // Load profile from localStorage on mount
+  // Load custom categories from localStorage on mount
   useEffect(() => {
-    const savedProfile = localStorage.getItem(PROFILE_STORAGE_KEY);
-    if (savedProfile) {
-      try {
-        const parsed = JSON.parse(savedProfile);
-        setProfile(parsed);
-      } catch (e) {
-        console.error('Failed to parse profile data:', e);
-      }
-    }
-
     // Load custom categories
     const savedCategories = localStorage.getItem(CATEGORIES_STORAGE_KEY);
     if (savedCategories) {
@@ -160,11 +144,6 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
     }
   }, []);
 
-  // Save profile to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profile));
-  }, [profile]);
-
   // Save custom categories to localStorage
   useEffect(() => {
     localStorage.setItem(CATEGORIES_STORAGE_KEY, JSON.stringify(customCategories));
@@ -191,7 +170,7 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
 
   const handleUsernameSave = () => {
     if (editUsername.trim()) {
-      setProfile({ ...profile, username: editUsername.trim() });
+      actions.setProfile({ ...profile, username: editUsername.trim() });
       setIsEditingUsername(false);
       setEditUsername('');
     }
@@ -207,7 +186,7 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          setProfile({ ...profile, picture: e.target?.result as string });
+          actions.setProfile({ ...profile, picture: e.target?.result as string });
         };
         reader.readAsDataURL(file);
       }
