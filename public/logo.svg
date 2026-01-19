@@ -1,0 +1,10 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Circle background - Wise green -->
+  <circle cx="256" cy="256" r="240" fill="#00B078"/>
+
+  <!-- Circle outline - white -->
+  <circle cx="256" cy="256" r="240" stroke="white" stroke-width="24" fill="none"/>
+
+  <!-- Fancy S text - white -->
+  <text x="256" y="365" font-family="SF Pro Display, -apple-system, system-ui, sans-serif" font-size="320" font-weight="700" fill="white" text-anchor="middle" letter-spacing="-10">S</text>
+</svg>

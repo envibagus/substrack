@@ -79,6 +79,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 // Provider component
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(appReducer, initialState);
+  const isProfileLoaded = useRef(false);
 
   // Load subscriptions from local storage on mount
   useEffect(() => {
@@ -128,6 +129,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         }
       } catch (error) {
         console.error('Failed to load profile:', error);
+      } finally {
+        // Mark as loaded after attempting to load
+        isProfileLoaded.current = true;
       }
     };
 
@@ -150,12 +154,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }, [state.currency]);
 
-  // Save profile to local storage whenever it changes
+  // Save profile to local storage whenever it changes (but not on initial load)
   useEffect(() => {
-    try {
-      localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(state.profile));
-    } catch (error) {
-      console.error('Failed to save profile:', error);
+    // Only save after initial load to prevent overwriting with defaults
+    if (isProfileLoaded.current) {
+      try {
+        localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(state.profile));
+      } catch (error) {
+        console.error('Failed to save profile:', error);
+      }
     }
   }, [state.profile]);
 
